@@ -1,0 +1,51 @@
+CREATE TABLE IF NOT EXISTS Users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    pass_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Clients (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    rate NUMERIC(10, 2) NOT NULL,
+    color VARCHAR(6) NOT NULL DEFAULT 'FFFFFF',
+    overtime_multiplier NUMERIC(3, 2) NOT NULL DEFAULT 1.0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Projects (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Activities (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    client_id INT NOT NULL,
+    project_id INT,
+    dt_worked DATE NOT NULL,
+    hours NUMERIC(5, 2) NOT NULL,
+    description VARCHAR(200),
+    fl_is_overtime BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES Clients(id),
+    FOREIGN KEY (project_id) REFERENCES Projects(id) ON DELETE SET NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_client_id ON Activities (client_id);
+CREATE INDEX IF NOT EXISTS idx_project_id ON Activities (project_id);
+CREATE INDEX IF NOT EXISTS idx_user_id_client ON Clients (user_id);
+CREATE INDEX IF NOT EXISTS idx_user_id_project ON Projects (user_id);
+CREATE INDEX IF NOT EXISTS idx_user_id_activity ON Activities (user_id);
