@@ -3,7 +3,7 @@ import Project from "src/projects/project.entity";
 import User from "src/users/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity("Activities")
+@Entity("activities")
 export default class Activity {
     @PrimaryGeneratedColumn()
     id: number;

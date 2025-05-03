@@ -2,7 +2,7 @@ import Activity from "src/activities/activity.entity";
 import User from "src/users/user.entity";
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from "typeorm";
 
-@Entity("Clients")
+@Entity("clients")
 export default class Client {
     @PrimaryGeneratedColumn()
     id: number;

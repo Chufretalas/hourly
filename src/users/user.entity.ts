@@ -3,7 +3,7 @@ import Client from "src/clients/client.entity";
 import Project from "src/projects/project.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity("Users")
+@Entity("users")
 export default class User {
     @PrimaryGeneratedColumn()
     id: number;
