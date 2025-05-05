@@ -1,8 +1,9 @@
 import { Crud, CrudController, Override } from '@dataui/crud';
-import { Body, Controller, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import CreateUserDto from './dto/create_user_dto';
 import User from './user.entity';
 import { UsersService } from './users.service';
+import UpdateUserDto from './dto/update_user_dto';
 
 @Crud({
   model: {
@@ -22,5 +23,9 @@ export class UsersController implements CrudController<User> {
     return this.service.createOneUser(dto)
   }
 
-  //TODO: make an update one endpoint
+  @Patch(":id")
+  async updateOneUser(@Param("id", new ParseIntPipe({ exceptionFactory: () => new BadRequestException('The user ID must be an integer.') })) id: number,
+    @Body() dto: UpdateUserDto): Promise<any> {
+    return this.service.updateOneUser(id, dto)
+  }
 }
